@@ -8,10 +8,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.widget.AdapterViewFlipper;
+import android.widget.Button;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.infusiblecoder.groceryadminfyp.R;
+
+import Adapters.FlipperAdapter;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -19,10 +23,26 @@ public class HomeActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private NavigationView nvDrawer;
 
+    //fipper
+    private AdapterViewFlipper adapterViewFlipper;
+    private Button btn_prev,btn_next;
+    private static String[] news = {"News one","News two","News three"};
+    private static int[] images = {R.drawable.bg_imgae,R.drawable.icon,R.drawable.news};
+    private int postition =-1;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        adapterViewFlipper = findViewById(R.id.mFlipper);
+
+        //createing adapter object
+
+        FlipperAdapter adapter = new FlipperAdapter(HomeActivity.this,images,news);
+        adapterViewFlipper.setAdapter(adapter);
+        adapterViewFlipper.setAutoStart(true);
 
         // Set a Toolbar to replace the ActionBar.
         toolbar = findViewById(R.id.toolbar);
