@@ -174,7 +174,6 @@ public class HomeActivity extends AppCompatActivity implements GetSliderItemPosi
     public void addDotsIndecator(int position){
 
 
-
         mDots = new TextView[3];
         mLayout.removeAllViews();
         for (int i = 0; i< mDots.length; i ++){
