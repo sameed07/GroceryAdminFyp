@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
+
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
+
+    <LinearLayout
+        android:id="@+id/mLinear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
 
     <TextView
         android:layout_width="wrap_content"
@@ -36,22 +45,34 @@
         android:textSize="16sp"
         android:textStyle="normal"
         android:layout_marginLeft="12dp"/>
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:orientation="vertical"
         android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
         android:layout_marginTop="12dp"
-        >
+        android:layout_marginRight="12dp">
 
         <AdapterViewFlipper
+            android:id="@+id/mFlipper"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/mFlipper"
-            android:flipInterval="4000"
-            />
+            android:flipInterval="4000" />
     </LinearLayout>
 
-</LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginBottom="8dp"
+        android:layout_alignBottom="@+id/mLinear"
+        android:orientation="horizontal"
+        android:id="@+id/txt_dot"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:textColor="#585858"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        android:layout_marginLeft="12dp"/>
+
+</RelativeLayout>

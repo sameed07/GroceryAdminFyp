@@ -1,35 +1,56 @@
 package Activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.widget.AdapterViewFlipper;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.infusiblecoder.groceryadminfyp.R;
 
-import Adapters.FlipperAdapter;
+import java.util.ArrayList;
+import java.util.List;
 
-public class HomeActivity extends AppCompatActivity {
+import Adapters.FlipperAdapter;
+import Adapters.GetSliderItemPosition;
+import Model.NewsModel;
+
+public class HomeActivity extends AppCompatActivity implements GetSliderItemPosition {
 
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
+
+    List<NewsModel> mList = new ArrayList<>();
+    private FirebaseDatabase mdatabase;
+    private DatabaseReference mRef;
 
     //fipper
     private AdapterViewFlipper adapterViewFlipper;
     private Button btn_prev,btn_next;
     private static String[] news = {"News one","News two","News three"};
     private static int[] images = {R.drawable.bg_imgae,R.drawable.icon,R.drawable.news};
-    private int postition =-1;
+   // private int postition =-1;
 
+    TextView[] mDots;
+    LinearLayout mLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +58,36 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         adapterViewFlipper = findViewById(R.id.mFlipper);
+        mdatabase = FirebaseDatabase.getInstance();
+        mRef = mdatabase.getReference("News");
+        mLayout = findViewById(R.id.txt_dot);
 
         //createing adapter object
 
-        FlipperAdapter adapter = new FlipperAdapter(HomeActivity.this,images,news);
+        final FlipperAdapter adapter = new FlipperAdapter(HomeActivity.this,mList,this);
         adapterViewFlipper.setAdapter(adapter);
         adapterViewFlipper.setAutoStart(true);
+
+        mRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    NewsModel model = ds.getValue(NewsModel.class);
+                    mList.add(model);
+
+                    adapter.notifyDataSetChanged();
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         // Set a Toolbar to replace the ActionBar.
         toolbar = findViewById(R.id.toolbar);
@@ -85,9 +130,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void selectDrawerItem(MenuItem menuItem) {
-        // Create a new fragment and specify the fragment to show based on nav item clicked
-//        Fragment fragment = new HomeFragment();
-//        Class fragmentClass;
+
         switch (menuItem.getItemId()) {
             case R.id.nav_home:
 
@@ -95,11 +138,7 @@ public class HomeActivity extends AppCompatActivity {
                 break;
             case R.id.nav_category:
                 toolbar.setTitle("Category");
-//                openFragment(new AllLoansFragment());
-////                menuItem.setChecked(true);
-////                // Set action bar title
-////                setTitle(menuItem.getTitle());
-////                // Close the navigation drawer
+
                 mDrawer.closeDrawers();
                 break;
             case R.id.nav_my_orders:
@@ -131,5 +170,33 @@ public class HomeActivity extends AppCompatActivity {
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         mAuth.signOut();
+    }
+
+    public void addDotsIndecator(int position){
+
+
+
+        mDots = new TextView[2];
+        mLayout.removeAllViews();
+        for (int i = 0; i< mDots.length; i ++){
+            mDots[i] = new TextView(this);
+            mDots[i].setText(Html.fromHtml("&#8226;"));
+            mDots[i].setTextSize(35);
+            mDots[i].setTextColor(getResources().getColor(R.color.gray));
+            mLayout.addView(mDots[i]);
+        }
+
+        if(mDots.length >= 0){
+            mDots[position].setTextColor(getResources().getColor(R.color.white));
+        }
+    }
+
+
+    @Override
+    public void getSlider(int position) {
+
+
+       // Toast.makeText(this, "My pos" +position, Toast.LENGTH_SHORT).show();
+        addDotsIndecator(position);
     }
 }

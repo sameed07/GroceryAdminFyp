@@ -9,24 +9,29 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.infusiblecoder.groceryadminfyp.R;
+import com.squareup.picasso.Picasso;
+
+import java.util.List;
+
+import Model.NewsModel;
 
 public class FlipperAdapter extends BaseAdapter {
 
     Context mContext;
-    int[] images;
-    String[] news;
+    List<NewsModel> modelList;
     LayoutInflater inflater;
+    GetSliderItemPosition mPosition;
 
-    public FlipperAdapter(Context mContext, int[] images, String[] news ) {
+    public FlipperAdapter(Context mContext, List<NewsModel> modelList, GetSliderItemPosition mPosition) {
         this.mContext = mContext;
-        this.images = images;
-        this.news = news;
+        this.modelList = modelList;
         this.inflater = LayoutInflater.from(mContext);
+        this.mPosition = mPosition;
     }
 
     @Override
     public int getCount() {
-        return news.length;
+        return modelList.size();
     }
 
     @Override
@@ -47,9 +52,16 @@ public class FlipperAdapter extends BaseAdapter {
         TextView txt_news = view.findViewById(R.id.txt_news);
         ImageView img = view.findViewById(R.id.mNewsImg);
 
-        txt_news.setText(news[position]);
-        img.setImageResource(images[position]);
+        NewsModel model = modelList.get(position);
+        txt_news.setText(model.getNews());
+        Picasso.get().load(model.getImg_url()).into(img);
+//        txt_news.setText(news[position]);
+//        img.setImageResource(images[position]);
+
+        mPosition.getSlider(position);
 
         return view;
     }
+
+
 }
