@@ -43,9 +43,7 @@ public class HomeActivity extends AppCompatActivity implements GetSliderItemPosi
 
     //fipper
     private AdapterViewFlipper adapterViewFlipper;
-    private Button btn_prev,btn_next;
-    private static String[] news = {"News one","News two","News three"};
-    private static int[] images = {R.drawable.bg_imgae,R.drawable.icon,R.drawable.news};
+
    // private int postition =-1;
 
     TextView[] mDots;
@@ -101,6 +99,7 @@ public class HomeActivity extends AppCompatActivity implements GetSliderItemPosi
         mDrawer = findViewById(R.id.drawer_layout);
         nvDrawer = findViewById(R.id.nvView);
         setupDrawerContent(nvDrawer);
+        nvDrawer.setCheckedItem(R.id.nav_home);
     }
 
     @Override
@@ -138,6 +137,7 @@ public class HomeActivity extends AppCompatActivity implements GetSliderItemPosi
             case R.id.nav_category:
                 toolbar.setTitle("Category");
 
+                startActivity(new Intent(HomeActivity.this,CateogryActivity.class));
                 mDrawer.closeDrawers();
                 break;
             case R.id.nav_my_orders:
