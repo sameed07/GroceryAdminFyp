@@ -14,7 +14,6 @@ import android.widget.AdapterViewFlipper;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Adapters.FlipperAdapter;
-import Adapters.GetSliderItemPosition;
+import Interfaces.GetSliderItemPosition;
 import Model.NewsModel;
 
 public class HomeActivity extends AppCompatActivity implements GetSliderItemPosition {
@@ -176,7 +175,7 @@ public class HomeActivity extends AppCompatActivity implements GetSliderItemPosi
 
 
 
-        mDots = new TextView[2];
+        mDots = new TextView[3];
         mLayout.removeAllViews();
         for (int i = 0; i< mDots.length; i ++){
             mDots[i] = new TextView(this);

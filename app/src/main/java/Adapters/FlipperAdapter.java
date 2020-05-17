@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import Interfaces.GetSliderItemPosition;
 import Model.NewsModel;
 
 public class FlipperAdapter extends BaseAdapter {

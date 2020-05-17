@@ -1,4 +1,4 @@
-package Adapters;
+package Interfaces;
 
 public interface GetSliderItemPosition  {
 
