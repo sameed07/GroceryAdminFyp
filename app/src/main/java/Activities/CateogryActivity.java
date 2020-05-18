@@ -5,10 +5,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.infusiblecoder.groceryadminfyp.R;
@@ -33,7 +30,7 @@ public class CateogryActivity extends AppCompatActivity {
         fab_category.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(CateogryActivity.this, "Clicked!", Toast.LENGTH_SHORT).show();
+               startActivity(new Intent(CateogryActivity.this, AddCategoryActivity.class));
             }
         });
 
