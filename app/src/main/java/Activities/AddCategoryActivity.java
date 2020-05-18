@@ -158,7 +158,7 @@ public class AddCategoryActivity extends AppCompatActivity {
 
                             Map<String, Object> map = new HashMap<>();
                             map.put("category_title", edt_category.getText().toString());
-                            map.put("Category_desc", edt_desc.getText().toString());
+                            map.put("category_desc", edt_desc.getText().toString());
                             map.put("category_img", mUrl);
                             mRef.push().setValue(map);
                             progressDialog.dismiss();
