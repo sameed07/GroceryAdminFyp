@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.widget.AdapterViewFlipper;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,8 +30,10 @@ import com.infusiblecoder.groceryadminfyp.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import Adapters.CategoryAdapter;
 import Adapters.FlipperAdapter;
 import Interfaces.GetSliderItemPosition;
+import Model.CategoryModel;
 import Model.NewsModel;
 
 public class HomeActivity extends AppCompatActivity implements GetSliderItemPosition {
@@ -40,6 +45,16 @@ public class HomeActivity extends AppCompatActivity implements GetSliderItemPosi
     List<NewsModel> mList = new ArrayList<>();
     private FirebaseDatabase mdatabase;
     private DatabaseReference mRef;
+
+    //recycler
+    RecyclerView categoryRecycler;
+    RecyclerView.LayoutManager layoutManager;
+    List<CategoryModel> catList = new ArrayList<>();
+    CategoryAdapter adapter;
+    //Firebase
+    FirebaseDatabase cateData;
+    DatabaseReference catRef;
+
 
     //fipper
     private AdapterViewFlipper adapterViewFlipper;
@@ -57,6 +72,39 @@ public class HomeActivity extends AppCompatActivity implements GetSliderItemPosi
         adapterViewFlipper = findViewById(R.id.mFlipper);
         mdatabase = FirebaseDatabase.getInstance();
         mRef = mdatabase.getReference("News");
+
+        cateData = FirebaseDatabase.getInstance();
+        catRef = cateData.getReference("Categories");
+
+        //init recycler
+        categoryRecycler = findViewById(R.id.category_recycler);
+        layoutManager = new LinearLayoutManager(this);
+        categoryRecycler.setLayoutManager(layoutManager);
+
+        catRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    CategoryModel model = postSnapshot.getValue(CategoryModel.class);
+                    model.setId(postSnapshot.getKey());
+
+                    catList.add(model);
+                    adapter = new CategoryAdapter(HomeActivity.this,catList);
+
+                    categoryRecycler.setAdapter(adapter);
+                    Toast.makeText(getApplication(), ""+ model.getCategory_title() , Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        //creating 3 dots
         mLayout = findViewById(R.id.txt_dot);
 
         //createing adapter object
