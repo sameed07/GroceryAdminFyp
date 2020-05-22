@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.infusiblecoder.groceryadminfyp.R;
 import com.squareup.picasso.Picasso;
 
@@ -18,7 +19,7 @@ public class ProductActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ImageView category_img;
     private TextView txt_title,txt_desc;
-
+    private FloatingActionButton fab_category;
     private String title,desc,productId,img_url;
 
     @Override
@@ -34,6 +35,16 @@ public class ProductActivity extends AppCompatActivity {
         txt_desc = findViewById(R.id.txt_desc);
         txt_title = findViewById(R.id.txt_title);
         category_img = findViewById(R.id.img_cateogry);
+        fab_category = findViewById(R.id.fab_product);
+
+
+        fab_category.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ProductActivity.this, AddProductActivity.class));
+            }
+        });
+
 
         title = getIntent().getStringExtra("title");
         desc = getIntent().getStringExtra("desc");

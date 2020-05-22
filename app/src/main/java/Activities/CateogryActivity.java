@@ -70,7 +70,7 @@ public class CateogryActivity extends AppCompatActivity {
                    adapter = new CategoryAdapter(CateogryActivity.this,mList);
 
                     categoryRecycler.setAdapter(adapter);
-                    Toast.makeText(getApplication(), ""+ model.getCategory_title() , Toast.LENGTH_SHORT).show();
+
                 }
 
             }
