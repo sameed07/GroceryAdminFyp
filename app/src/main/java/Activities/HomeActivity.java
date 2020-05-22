@@ -93,7 +93,7 @@ public class HomeActivity extends AppCompatActivity implements GetSliderItemPosi
                     adapter = new CategoryAdapter(HomeActivity.this,catList);
 
                     categoryRecycler.setAdapter(adapter);
-                    Toast.makeText(getApplication(), ""+ model.getCategory_title() , Toast.LENGTH_SHORT).show();
+
                 }
 
             }
