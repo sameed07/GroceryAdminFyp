@@ -64,7 +64,7 @@ public class CateogryActivity extends AppCompatActivity {
 
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                     CategoryModel model = postSnapshot.getValue(CategoryModel.class);
-                   model.setId(postSnapshot.getKey());
+                    model.setId(postSnapshot.getKey());
 
                    mList.add(model);
                    adapter = new CategoryAdapter(CateogryActivity.this,mList);

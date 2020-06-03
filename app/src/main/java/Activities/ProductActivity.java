@@ -41,7 +41,9 @@ public class ProductActivity extends AppCompatActivity {
         fab_category.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ProductActivity.this, AddProductActivity.class));
+                Intent i = new Intent(ProductActivity.this, AddProductActivity.class);
+                i.putExtra("product_id",productId);
+                startActivity(i);
             }
         });
 
