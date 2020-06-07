@@ -29,6 +29,8 @@ import com.google.firebase.storage.UploadTask;
 import com.infusiblecoder.groceryadminfyp.R;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -177,7 +179,8 @@ public class AddProductActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Uri> task) {
                     if (task.isSuccessful()) {
                         Uri downloadUri = task.getResult();
-
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z");
+                        String currentDateandTime = sdf.format(new Date());
                         mUrl = downloadUri.toString();
 
                         Map<String, Object> map = new HashMap<>();
@@ -186,7 +189,7 @@ public class AddProductActivity extends AppCompatActivity {
                         map.put("product_img", mUrl);
                         map.put("product_price",edt_price.getText().toString());
                         map.put("category_id", productId);
-                        map.put("time_stamp",System.currentTimeMillis());
+                        map.put("time_stamp",currentDateandTime);
                         mRef.push().setValue(map);
                         progressDialog.dismiss();
                         Toast.makeText(AddProductActivity.this, "Saved", Toast.LENGTH_SHORT).show();
