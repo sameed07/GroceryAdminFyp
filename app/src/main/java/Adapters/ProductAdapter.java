@@ -1,11 +1,15 @@
 package Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +19,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import Activities.EditProductActivity;
+import Activities.MainActivity;
 import Activities.ProductActivity;
 import Model.CategoryModel;
 import Model.ProductModel;
@@ -40,13 +46,55 @@ public class ProductAdapter extends  RecyclerView.Adapter<ProductAdapter.ViewHol
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ProductAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ProductAdapter.ViewHolder holder, int position) {
 
-        ProductModel model = mList.get(position);
+        final ProductModel model = mList.get(position);
 
         Picasso.get().load(model.getProduct_img()).into(holder.product_img);
         holder.txt_title.setText(model.getProduct_title());
         holder.txt_price.setText("Rs. "+model.getProduct_price());
+
+        holder.product_img.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                PopupMenu popup = new PopupMenu(mContext, holder.product_img);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater()
+                        .inflate(R.menu.popup_menu, popup.getMenu());
+
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+
+
+                        switch (item.getItemId()){
+
+                            case R.id.menu_edt : {
+                                Intent i = new Intent(mContext, EditProductActivity.class);
+                                i.putExtra("product_id",model.getProduct_id());
+                                i.putExtra("category_id",model.getCategory_id());
+                                mContext.startActivity(i);
+                                break;
+                            }
+                            case R.id.menu_delete : {
+                                Toast.makeText(mContext, "Delete", Toast.LENGTH_SHORT).show();
+                                break;
+                            }
+
+                            default:
+                                return false;
+                        }
+
+                        return true;
+                    }
+                });
+
+                popup.show(); //showing popup menu
+                return false;
+            }
+        });
+
 
     }
 

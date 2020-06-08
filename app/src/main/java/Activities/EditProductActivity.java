@@ -21,12 +21,16 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.infusiblecoder.groceryadminfyp.R;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -35,7 +39,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class AddProductActivity extends AppCompatActivity {
+import Model.ProductModel;
+
+public class EditProductActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
 
@@ -43,7 +49,7 @@ public class AddProductActivity extends AppCompatActivity {
     private ImageView product_img;
     private Button btn_addProduct;
 
-    String productId ;
+    String productId, cateogry_id ;
 
     //Firebase
     FirebaseDatabase mDatabase;
@@ -60,35 +66,24 @@ public class AddProductActivity extends AppCompatActivity {
     private Uri filePath;
     private String mUrl;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_product);
+        setContentView(R.layout.activity_edit_product);
 
         // Set a Toolbar to replace the ActionBar.
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Products");
+        toolbar.setTitle("Edit Products");
         setSupportActionBar(toolbar);
 
         productId = getIntent().getStringExtra("product_id");
+        cateogry_id = getIntent().getStringExtra("category_id");
 
         //setupfirebase
         mDatabase = FirebaseDatabase.getInstance();
-        mRef = mDatabase.getReference("Products");
+        mRef = mDatabase.getReference("Products").child(productId);
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference("product_images");
-
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                finish();
-            }
-        });
 
         edt_desc = findViewById(R.id.edt_desc);
         edt_title = findViewById(R.id.edt_title);
@@ -96,18 +91,22 @@ public class AddProductActivity extends AppCompatActivity {
         btn_addProduct = findViewById(R.id.btn_addProduct);
         product_img = findViewById(R.id.category_img);
 
-//        btn_addProduct.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(AddProductActivity.this, "Uploaded!", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+
 
         product_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 chooseImage();
 
+            }
+        });
+
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                finish();
             }
         });
 
@@ -120,10 +119,12 @@ public class AddProductActivity extends AppCompatActivity {
 
                 }else{
 
-                    Toast.makeText(AddProductActivity.this, "All fields must be filled", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditProductActivity.this, "All fields must be filled", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+        getProductDetails();
     }
 
     private void chooseImage() {
@@ -132,7 +133,8 @@ public class AddProductActivity extends AppCompatActivity {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
 
-        Toast.makeText(this, "" + productId, Toast.LENGTH_SHORT).show();
+
+
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -141,6 +143,7 @@ public class AddProductActivity extends AppCompatActivity {
                 && data != null && data.getData() != null )
         {
             filePath = data.getData();
+
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 product_img.setImageBitmap(bitmap);
@@ -154,7 +157,7 @@ public class AddProductActivity extends AppCompatActivity {
 
     private void uploadImage() {
 
-        if(filePath != null )
+        if(filePath != null)
         {
 
             final ProgressDialog progressDialog = new ProgressDialog(this);
@@ -188,16 +191,16 @@ public class AddProductActivity extends AppCompatActivity {
                         map.put("product_desc", edt_desc.getText().toString());
                         map.put("product_img", mUrl);
                         map.put("product_price",edt_price.getText().toString());
-                        map.put("category_id", productId);
+                        map.put("category_id", cateogry_id);
                         map.put("time_stamp",currentDateandTime);
-                        mRef.push().setValue(map);
+                        mRef.updateChildren(map);
                         progressDialog.dismiss();
-                        Toast.makeText(AddProductActivity.this, "Saved", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(AddProductActivity.this, CateogryActivity.class));
+                        Toast.makeText(EditProductActivity.this, "Saved", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(EditProductActivity.this, CateogryActivity.class));
 
                     } else {
                         progressDialog.dismiss();
-                        Toast.makeText(AddProductActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditProductActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         Log.d("dxdiag", "onComplete: " + task.getException().getMessage());
                     }
                 }
@@ -208,5 +211,25 @@ public class AddProductActivity extends AppCompatActivity {
 
             Toast.makeText(this, "Please Select Image", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void getProductDetails(){
+
+        mRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                ProductModel model = dataSnapshot.getValue(ProductModel.class);
+                edt_desc.setText(model.getProduct_desc());
+                edt_price.setText(model.getProduct_price());
+                edt_title.setText(model.getProduct_title());
+                Picasso.get().load(model.getProduct_img()).into(product_img);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

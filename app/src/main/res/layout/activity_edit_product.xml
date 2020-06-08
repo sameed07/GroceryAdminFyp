@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar"/>
+
+    <ImageView
+        android:scaleType="fitXY"
+        android:src="@drawable/default_img"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_margin="12dp"
+        android:id="@+id/category_img"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:hint="Category Title"
+        android:id="@+id/edt_title"
+
+        android:background="@drawable/edt_background"
+        android:layout_margin="12dp"
+        android:padding="12dp"
+        />
+    <EditText
+        android:inputType="numberDecimal"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:hint="Price"
+        android:id="@+id/edt_price"
+        android:background="@drawable/edt_background"
+        android:layout_marginRight="12dp"
+        android:layout_marginLeft="12dp"
+        android:padding="12dp"
+        />
+    <EditText
+        android:maxLines="4"
+        android:layout_marginTop="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:hint="Category description"
+        android:id="@+id/edt_desc"
+        android:background="@drawable/edt_background"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:padding="12dp"
+        android:gravity="start"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Product"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="12dp"
+        android:background="@drawable/login_btn_background"
+        android:textColor="@color/white"
+        android:id="@+id/btn_addProduct"
+        />
+
+
+</LinearLayout>
