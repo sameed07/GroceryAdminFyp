@@ -1,6 +1,8 @@
 package Adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -14,6 +16,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.infusiblecoder.groceryadminfyp.R;
 import com.squareup.picasso.Picasso;
 
@@ -78,7 +82,30 @@ public class ProductAdapter extends  RecyclerView.Adapter<ProductAdapter.ViewHol
                                 break;
                             }
                             case R.id.menu_delete : {
-                                Toast.makeText(mContext, "Delete", Toast.LENGTH_SHORT).show();
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                                builder.setTitle("Confirm dialog demo !");
+                                builder.setMessage("You are about to delete all records of database. Do you really want to proceed ?");
+                                builder.setCancelable(false);
+                                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        FirebaseDatabase mdatabase = FirebaseDatabase.getInstance();
+                                        DatabaseReference mRef = mdatabase.getReference("Products").child(model.getProduct_id());
+                                        mRef.removeValue();
+                                    }
+                                });
+
+                                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                      ;
+                                    }
+                                });
+
+                                builder.show();
+
+
                                 break;
                             }
 
