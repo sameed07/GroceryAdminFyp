@@ -26,6 +26,7 @@ import java.util.List;
 import Activities.EditProductActivity;
 import Activities.MainActivity;
 import Activities.ProductActivity;
+import Activities.ProductDetailActivity;
 import Model.CategoryModel;
 import Model.ProductModel;
 
@@ -57,6 +58,20 @@ public class ProductAdapter extends  RecyclerView.Adapter<ProductAdapter.ViewHol
         Picasso.get().load(model.getProduct_img()).into(holder.product_img);
         holder.txt_title.setText(model.getProduct_title());
         holder.txt_price.setText("Rs. "+model.getProduct_price());
+
+        holder.product_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(mContext, ProductDetailActivity.class);
+                i.putExtra("product_title",model.getProduct_title());
+                i.putExtra("product_desc",model.getProduct_desc());
+                i.putExtra("product_price",model.getProduct_price());
+                i.putExtra("product_time",model.getTime_stamp());
+                i.putExtra("product_img",model.getProduct_img());
+                mContext.startActivity(i);
+
+            }
+        });
 
         holder.product_img.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

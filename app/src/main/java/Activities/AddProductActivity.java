@@ -70,7 +70,8 @@ public class AddProductActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Products");
         setSupportActionBar(toolbar);
-
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         productId = getIntent().getStringExtra("product_id");
 
         //setupfirebase

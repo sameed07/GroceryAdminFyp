@@ -75,6 +75,8 @@ public class EditProductActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Edit Products");
         setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         productId = getIntent().getStringExtra("product_id");
         cateogry_id = getIntent().getStringExtra("category_id");

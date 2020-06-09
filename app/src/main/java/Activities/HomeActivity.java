@@ -189,16 +189,18 @@ public class HomeActivity extends AppCompatActivity implements GetSliderItemPosi
                 mDrawer.closeDrawers();
                 break;
             case R.id.nav_my_orders:
-//                openFragment(new LatestLoanFragment());
-////                menuItem.setChecked(true);
-////                // Set action bar title
-////                setTitle(menuItem.getTitle());
-////                // Close the navigation drawer
+                 toolbar.setTitle("Orders");
+
+                startActivity(new Intent(HomeActivity.this,OrdersActivity.class));
+
                 mDrawer.closeDrawers();
                 break;
 
             case R.id.nav_settnig:
+                toolbar.setTitle("Setting");
 
+                startActivity(new Intent(HomeActivity.this,SettingActivity.class));
+              ;
                 mDrawer.closeDrawers();
                 break;
             case R.id.nav_logout:

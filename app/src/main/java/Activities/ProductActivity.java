@@ -68,6 +68,9 @@ public class ProductActivity extends AppCompatActivity {
         toolbar.setTitle("Products");
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         txt_desc = findViewById(R.id.txt_desc);
         txt_title = findViewById(R.id.txt_title);
         category_img = findViewById(R.id.img_cateogry);
