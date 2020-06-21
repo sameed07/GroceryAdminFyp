@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -32,24 +34,37 @@ public class OrderDetailActivity extends AppCompatActivity {
     private FirebaseDatabase mdatabase;
     private DatabaseReference mRef;
 
+    TextView txt_address,txt_total_price,txt_total_item;
+    Button btn_deliverd;
+
+
     //recycler
     RecyclerView orderRecycler;
     RecyclerView.LayoutManager layoutManager;
     List<CartModel> mList = new ArrayList<>();
 
-    String orderId;
+    String orderId,address,total_price,total_item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_detail);
         orderId = getIntent().getStringExtra("order_id");
+        address = getIntent().getStringExtra("address");
+        total_item = getIntent().getStringExtra("total_item");
+        total_price = getIntent().getStringExtra("total_price");
 
         mdatabase = FirebaseDatabase.getInstance();
         mRef   = mdatabase.getReference("Orders").child(orderId).child("items");
         orderRecycler = findViewById(R.id.order_detail_recycler);
         layoutManager = new LinearLayoutManager(this);
         orderRecycler.setLayoutManager(layoutManager);
+        txt_address = findViewById(R.id.txt_address);
+        txt_total_price = findViewById(R.id.txt_total_price);
+        txt_total_item = findViewById(R.id.txt_total_item);
+        btn_deliverd = findViewById(R.id.btn_delivered);
+        
+
         // Set a Toolbar to replace the ActionBar.
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Orders");
@@ -57,7 +72,16 @@ public class OrderDetailActivity extends AppCompatActivity {
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //  loadData();
+        txt_address.setText(address);
+        txt_total_item.setText(total_item);
+        txt_total_price.setText(total_price);
+        
+        btn_deliverd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(OrderDetailActivity.this, "Order Delivered", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

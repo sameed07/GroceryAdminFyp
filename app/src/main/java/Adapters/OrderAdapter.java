@@ -53,6 +53,9 @@ public class OrderAdapter extends  RecyclerView.Adapter<OrderAdapter.ViewHolder>
 
                 Intent i = new Intent(mContext, OrderDetailActivity.class);
                 i.putExtra("order_id",model.getOrder_id());
+                i.putExtra("address",model.getAddress());
+                i.putExtra("total_item",model.getTotal_item());
+                i.putExtra("total_price",model.getTotal_price());
                 mContext.startActivity(i);
             }
         });

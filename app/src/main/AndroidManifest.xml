@@ -12,9 +12,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name="Activities.OrderDetailActivity"></activity>
         <activity android:name="Activities.SettingActivity" />
-        <activity android:name="Activities.OrdersActivity" />
+        <activity android:name="Activities.OrdersActivity"/>
+
+        <service android:name="Services.MyFirebaseInstanceService">
+
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
         <activity android:name="Activities.ProductDetailActivity" />
         <activity android:name="Activities.EditProductActivity" />
         <activity android:name="Activities.AddProductActivity" />
@@ -23,12 +31,17 @@
         <activity android:name="Activities.CateogryActivity" />
         <activity android:name="Activities.HomeActivity" />
         <activity android:name="Activities.MainActivity">
+
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
+
         </activity>
+
     </application>
 
 </manifest>

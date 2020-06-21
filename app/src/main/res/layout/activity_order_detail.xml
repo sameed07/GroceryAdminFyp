@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -11,10 +11,112 @@
     <include layout="@layout/toolbar"/>
 
     <androidx.recyclerview.widget.RecyclerView
+
+        android:layout_above="@+id/bottom_layout"
+        android:layout_below="@+id/toolbar"
         android:padding="8dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/order_detail_recycler"
+        android:layout_marginBottom="150dp"
         />
 
-</LinearLayout>
+    <LinearLayout
+
+        android:layout_above="@+id/btn_delivered"
+        android:id="@+id/bottom_layout"
+
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginLeft="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Shipment Detail"
+            />
+
+        <LinearLayout
+            android:layout_marginTop="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+            <TextView
+
+                android:textStyle="bold"
+                android:layout_marginLeft="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Address:"
+                />
+            <TextView
+                android:id="@+id/txt_address"
+                android:textStyle="bold"
+                android:layout_marginLeft="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Shipment Detail"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+            <TextView
+
+                android:textStyle="bold"
+                android:layout_marginLeft="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Items:"
+                />
+            <TextView
+                android:id="@+id/txt_total_item"
+                android:textStyle="bold"
+                android:layout_marginLeft="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="x2"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+            <TextView
+
+                android:textStyle="bold"
+                android:layout_marginLeft="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Price:"
+                />
+            <TextView
+                android:id="@+id/txt_total_price"
+                android:textStyle="bold"
+                android:layout_marginLeft="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rs. 2400"
+                />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/btn_delivered"
+        android:text="Deliver Order"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/white"
+        android:textAllCaps="false"/>
+
+</RelativeLayout>
