@@ -34,7 +34,7 @@ public class OrderDetailActivity extends AppCompatActivity {
     private FirebaseDatabase mdatabase;
     private DatabaseReference mRef;
 
-    TextView txt_address,txt_total_price,txt_total_item;
+    TextView txt_address,txt_total_price,txt_total_item,txt_phone;
     Button btn_deliverd;
 
 
@@ -43,7 +43,7 @@ public class OrderDetailActivity extends AppCompatActivity {
     RecyclerView.LayoutManager layoutManager;
     List<CartModel> mList = new ArrayList<>();
 
-    String orderId,address,total_price,total_item;
+    String orderId,address,total_price,total_item,phone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +53,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         address = getIntent().getStringExtra("address");
         total_item = getIntent().getStringExtra("total_item");
         total_price = getIntent().getStringExtra("total_price");
+        phone = getIntent().getStringExtra("phone");
 
         mdatabase = FirebaseDatabase.getInstance();
         mRef   = mdatabase.getReference("Orders").child(orderId).child("items");
@@ -62,6 +63,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         txt_address = findViewById(R.id.txt_address);
         txt_total_price = findViewById(R.id.txt_total_price);
         txt_total_item = findViewById(R.id.txt_total_item);
+        txt_phone = findViewById(R.id.txt_phone);
         btn_deliverd = findViewById(R.id.btn_delivered);
         
 
@@ -74,6 +76,7 @@ public class OrderDetailActivity extends AppCompatActivity {
 
         txt_address.setText(address);
         txt_total_item.setText(total_item);
+        txt_phone.setText(phone);
         txt_total_price.setText(total_price);
         
         btn_deliverd.setOnClickListener(new View.OnClickListener() {
@@ -104,7 +107,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                     CartModel model = ds.getValue(CartModel.class);
                     mList.add(model);
 
-                    Toast.makeText(OrderDetailActivity.this, "" + model.getTitle(), Toast.LENGTH_SHORT).show();
+
 
                     OrderDetailAdapter adapter = new OrderDetailAdapter(mList,OrderDetailActivity.this);
                     orderRecycler.setAdapter(adapter);

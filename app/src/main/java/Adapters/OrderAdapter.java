@@ -1,20 +1,29 @@
 package Adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.infusiblecoder.groceryadminfyp.R;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import Activities.EditProductActivity;
 import Activities.OrderDetailActivity;
 import Model.OrderModel;
 
@@ -38,7 +47,7 @@ public class OrderAdapter extends  RecyclerView.Adapter<OrderAdapter.ViewHolder>
     }
 
     @Override
-    public void onBindViewHolder(@NonNull OrderAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final OrderAdapter.ViewHolder holder, int position) {
 
         final OrderModel model = mList.get(position);
 
@@ -56,11 +65,72 @@ public class OrderAdapter extends  RecyclerView.Adapter<OrderAdapter.ViewHolder>
                 i.putExtra("address",model.getAddress());
                 i.putExtra("total_item",model.getTotal_item());
                 i.putExtra("total_price",model.getTotal_price());
+                i.putExtra("phone", model.getPhone());
                 mContext.startActivity(i);
             }
         });
 
-}
+        holder.order_layout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                PopupMenu popup = new PopupMenu(mContext, holder.order_layout);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater()
+                        .inflate(R.menu.order_menu, popup.getMenu());
+
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+
+
+                        switch (item.getItemId()){
+
+                            case R.id.menu_pending : {
+                                FirebaseDatabase mdatabase = FirebaseDatabase.getInstance();
+                                DatabaseReference mRef = mdatabase.getReference("Orders").child(model.getOrder_id());
+                                Map<String, Object> map = new HashMap<>();
+                                map.put("address", model.getAddress());
+                                map.put("phone", model.getPhone());
+                                map.put("order_status", "Pennding");
+                                map.put("total_item",model.getTotal_item());
+                                map.put("total_price",model.getTotal_price());
+                                map.put("user_id",model.getUser_id());
+
+                                mRef.updateChildren(map);
+                                break;
+                            }
+                            case R.id.menu_onway : {
+
+                                FirebaseDatabase mdatabase = FirebaseDatabase.getInstance();
+                                DatabaseReference mRef = mdatabase.getReference("Orders").child(model.getOrder_id());
+                                Map<String, Object> map = new HashMap<>();
+                                map.put("address", model.getAddress());
+                                map.put("phone", model.getPhone());
+                                map.put("order_status", "On the way");
+                                map.put("total_item",model.getTotal_item());
+                                map.put("total_price",model.getTotal_price());
+                                map.put("user_id",model.getUser_id());
+
+                                mRef.updateChildren(map);
+                                break;
+                            }
+
+                            default:
+                                return false;
+                        }
+
+                        return true;
+                    }
+                });
+
+                popup.show(); //showing popup menu
+                return false;
+            }
+        });
+
+
+    }
 
     @Override
     public int getItemCount() {

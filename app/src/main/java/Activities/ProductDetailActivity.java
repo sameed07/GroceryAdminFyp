@@ -18,7 +18,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ImageView product_img;
     private TextView txt_title,txt_desc,txt_price,txt_time;
-    private String title,desc,productId,img_url,price,time;
+    private String title,desc,productId,img_url,price,time,phone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +30,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         price = getIntent().getStringExtra("product_price");
         time = getIntent().getStringExtra("product_time");
         img_url = getIntent().getStringExtra("product_img");
+
 
         // Set a Toolbar to replace the ActionBar.
         toolbar = findViewById(R.id.toolbar);
