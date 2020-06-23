@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,7 +22,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.infusiblecoder.groceryadminfyp.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import Adapters.OrderDetailAdapter;
 import Model.CartModel;
@@ -43,7 +46,7 @@ public class OrderDetailActivity extends AppCompatActivity {
     RecyclerView.LayoutManager layoutManager;
     List<CartModel> mList = new ArrayList<>();
 
-    String orderId,address,total_price,total_item,phone;
+    String orderId,address,total_price,total_item,phone,user_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         total_item = getIntent().getStringExtra("total_item");
         total_price = getIntent().getStringExtra("total_price");
         phone = getIntent().getStringExtra("phone");
+        user_id = getIntent().getStringExtra("user_id");
 
         mdatabase = FirebaseDatabase.getInstance();
         mRef   = mdatabase.getReference("Orders").child(orderId).child("items");
@@ -65,8 +69,9 @@ public class OrderDetailActivity extends AppCompatActivity {
         txt_total_item = findViewById(R.id.txt_total_item);
         txt_phone = findViewById(R.id.txt_phone);
         btn_deliverd = findViewById(R.id.btn_delivered);
-        
 
+
+        Toast.makeText(this, "" + orderId, Toast.LENGTH_SHORT).show();
         // Set a Toolbar to replace the ActionBar.
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Orders");
@@ -82,6 +87,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         btn_deliverd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                completeOrder();
                 Toast.makeText(OrderDetailActivity.this, "Order Delivered", Toast.LENGTH_SHORT).show();
             }
         });
@@ -120,5 +126,39 @@ public class OrderDetailActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void completeOrder(){
+
+        mRef = mdatabase.getReference("Complete_Orders");
+        final long val = System.currentTimeMillis();
+        Map<String, String> map = new HashMap<>();
+        map.put("total_item", txt_total_item.getText().toString());
+        map.put("total_price", txt_total_price.getText().toString());
+        map.put("address", txt_address.getText().toString());
+        map.put("phone", txt_phone.getText().toString());
+        map.put("user_id", user_id);
+        map.put("order_status","pending");
+        //   Toast.makeText(this, "" + val, Toast.LENGTH_SHORT).show();
+
+
+        mRef.child(orderId).setValue(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+
+
+                mRef.child(orderId).child(""+val).child("items").setValue(mList).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+
+
+                    }
+                });
+            }
+        });
+
+
     }
 }

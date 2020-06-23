@@ -66,6 +66,7 @@ public class OrderAdapter extends  RecyclerView.Adapter<OrderAdapter.ViewHolder>
                 i.putExtra("total_item",model.getTotal_item());
                 i.putExtra("total_price",model.getTotal_price());
                 i.putExtra("phone", model.getPhone());
+                i.putExtra("user_id", model.getUser_id());
                 mContext.startActivity(i);
             }
         });
